@@ -25,8 +25,8 @@
         <label class="form-check-label">Участники:</label>
 
         <div *ngFor="let person of persons; let i = index" class="form-check">
-          <input (change)="updateCheck(person, i)" [checked]="person.checked" class="form-check-input"
-                 [id]="'label' + person.id" type="checkbox">
+          <input (change)="updateCheck(person, i)" [checked]="person.checked" [id]="'label' + person.id"
+                 class="form-check-input" type="checkbox">
           <label [for]="'label' + person.id" class="form-check-label">
             {{person.name}}
           </label>

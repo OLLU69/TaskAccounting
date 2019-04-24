@@ -47,15 +47,6 @@ export class AddTaskComponent implements OnInit {
     log('startDate: ' + this.task.startDate + '; endDate: ' + this.task.endDate);
   }
 
-  private prepareCheckers() {
-    this.task.personsList.forEach(person => {
-      const checkedPerson = this.persons.find(chPerson => chPerson.id === person.id);
-      if (checkedPerson !== undefined) {
-        checkedPerson.checked = true;
-      }
-    });
-  }
-
   saveTask(task: Task) {
     const personsToSave: Person[] = [];
     this.persons.filter(value => value.checked).forEach(value => personsToSave.push(value));
@@ -83,5 +74,14 @@ export class AddTaskComponent implements OnInit {
     const value = this.persons[i];
     value.checked = !value.checked;
     log('name:' + value.name + ' checked: ' + value.checked);
+  }
+
+  private prepareCheckers() {
+    this.task.personsList.forEach(person => {
+      const checkedPerson = this.persons.find(chPerson => chPerson.id === person.id);
+      if (checkedPerson !== undefined) {
+        checkedPerson.checked = true;
+      }
+    });
   }
 }
