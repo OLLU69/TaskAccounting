@@ -9,8 +9,9 @@ import {map} from 'rxjs/operators';
   providedIn: 'root'
 })
 export class TaskService {
-  private personsUrl = '/persons';
-  private tasksUrl = '/tasks/';
+  private base = 'http://localhost:8080';
+  private personsUrl = this.base + '/persons';
+  private tasksUrl = this.base + '/tasks/';
   private persons: Person[];
 
   constructor(private http: HttpClient) {
@@ -36,7 +37,7 @@ export class TaskService {
   }
 
   public update(task: Task): Observable<Task> {
-    return this.http.put<Task>('tasks/' + task.id, task);
+    return this.http.put<Task>(this.tasksUrl + task.id, task);
   }
 
   public delete(id: number): Observable<any> {

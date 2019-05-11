@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import ua.dp.ollu.task_accounting.controllers.DateConverter;
 import ua.dp.ollu.task_accounting.model.Person;
 import ua.dp.ollu.task_accounting.model.PersonsInTask;
 import ua.dp.ollu.task_accounting.model.Task;
 import ua.dp.ollu.task_accounting.repositories.PersonRepository;
 import ua.dp.ollu.task_accounting.repositories.TaskRepository;
+import ua.dp.ollu.task_accounting.service.DateConverter;
 
 import java.util.Arrays;
 import java.util.HashSet;

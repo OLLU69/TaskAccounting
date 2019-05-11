@@ -11,6 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class AddTaskComponent implements OnInit {
 
+  header: string = 'Создание задания';
   task: Task = new Task();
   persons: CheckedPerson[] = [];
   private addMode = 'add-mode';
@@ -34,13 +35,15 @@ export class AddTaskComponent implements OnInit {
     }
     persons.forEach(value => this.persons.push(new CheckedPerson().set(value)));
     if (id === undefined) {
-      this.task = new Task();
       this.mode = this.addMode;
+      this.header = 'Создание задания';
+      this.task = new Task();
     } else {
       this.service.getTask(id).subscribe(value => {
+        this.mode = this.editMode;
+        this.header = 'Редактирование задания';
         this.task = value;
         this.prepareCheckers();
-        this.mode = this.editMode;
       });
     }
     log(this.mode);
@@ -54,11 +57,13 @@ export class AddTaskComponent implements OnInit {
 
     if (this.mode === this.addMode) {
       log(this.addMode);
+      // noinspection JSUnusedLocalSymbols
       this.service.save(task).subscribe(
         value => this.back(),
         error1 => log(error1));
     } else {
       log(this.editMode);
+      // noinspection JSUnusedLocalSymbols
       this.service.update(task).subscribe(
         value => this.back(),
         error1 => log(error1));

@@ -2,11 +2,11 @@ package ua.dp.ollu.task_accounting;
 
 import org.junit.Assert;
 import org.junit.Test;
-import ua.dp.ollu.task_accounting.controllers.DateConverter;
-import ua.dp.ollu.task_accounting.controllers.TaskController;
 import ua.dp.ollu.task_accounting.model.Person;
 import ua.dp.ollu.task_accounting.model.PersonsInTask;
 import ua.dp.ollu.task_accounting.model.Task;
+import ua.dp.ollu.task_accounting.service.DateConverter;
+import ua.dp.ollu.task_accounting.service.TaskServiceImpl;
 
 import java.util.*;
 
@@ -51,7 +51,7 @@ public class SimileTest {
         Task task = new Task();
         task.setId(105L);
         task.setPersons(source);
-        Set<PersonsInTask> inTaskList = TaskController.syncPersonsInTaskList(task, peoples);
+        Set<PersonsInTask> inTaskList = TaskServiceImpl.syncPersonsInTaskListFromPersonsList(task, peoples);
         Assert.assertNotNull(inTaskList.stream().filter(inTask -> inTask.getPerson().getId() == 1).findFirst().orElse(null));
         Assert.assertNotNull(inTaskList.stream().filter(inTask -> inTask.getPerson().getId() == 2).findFirst().orElse(null));
         Assert.assertNotNull(inTaskList.stream().filter(inTask -> inTask.getPerson().getId() == 3).findFirst().orElse(null));

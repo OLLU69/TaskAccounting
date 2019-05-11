@@ -1,4 +1,6 @@
-package ua.dp.ollu.task_accounting.controllers;
+package ua.dp.ollu.task_accounting.service;
+
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +12,7 @@ public interface DateConverter {
 
     String format(Date date);
 
+    @Service("dateConverter")
     class TaskConverter implements DateConverter {
         private static final String pattern = "yyyy-MM-dd";
         private static final SimpleDateFormat formatter = new SimpleDateFormat(pattern);
