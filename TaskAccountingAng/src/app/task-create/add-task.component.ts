@@ -14,6 +14,7 @@ export class AddTaskComponent implements OnInit {
   header: string = 'Создание задания';
   task: Task = new Task();
   persons: CheckedPerson[] = [];
+  alertMessage: string = null;
   private addMode = 'add-mode';
   private editMode = 'edit-mode';
   private mode: string = this.addMode;
@@ -24,11 +25,12 @@ export class AddTaskComponent implements OnInit {
   ngOnInit() {
     const id: number = this.route.snapshot.params.id;
     log(id);
-    this.setupPersons(id);
+    this.service.getAllPersons().subscribe(value => {
+      return this.setupPersons(id, value);
+    });
   }
 
-  setupPersons(id: number) {
-    const persons = this.service.getAllPersons();
+  setupPersons(id: number, persons: Person[]) {
     if (persons === undefined) {
       this.persons = [];
       return;
@@ -52,6 +54,7 @@ export class AddTaskComponent implements OnInit {
 
   saveTask(task: Task) {
     const personsToSave: Person[] = [];
+    this.showError(null);
     this.persons.filter(value => value.checked).forEach(value => personsToSave.push(value));
     task.personsList = personsToSave;
 
@@ -60,13 +63,23 @@ export class AddTaskComponent implements OnInit {
       // noinspection JSUnusedLocalSymbols
       this.service.save(task).subscribe(
         value => this.back(),
-        error1 => log(error1));
+        error => {
+          log(error.error.message);
+          this.showError(error.message)
+        });
     } else {
       log(this.editMode);
       // noinspection JSUnusedLocalSymbols
       this.service.update(task).subscribe(
-        value => this.back(),
-        error1 => log(error1));
+        value => {
+          log("Ok");
+          this.back();
+        },
+        error => {
+          log(error.error.message);
+          this.showError(error.error.message)
+
+        });
     }
   }
 
@@ -88,5 +101,9 @@ export class AddTaskComponent implements OnInit {
         checkedPerson.checked = true;
       }
     });
+  }
+
+  private showError(message: string) {
+    this.alertMessage = message
   }
 }

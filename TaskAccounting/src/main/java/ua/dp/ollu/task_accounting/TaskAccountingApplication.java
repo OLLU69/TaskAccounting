@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.Transactional;
 import ua.dp.ollu.task_accounting.model.Person;
 import ua.dp.ollu.task_accounting.repositories.PersonRepository;
 
@@ -24,8 +25,10 @@ public class TaskAccountingApplication extends SpringBootServletInitializer {
     }
 
     @Bean
+    @Transactional
     CommandLineRunner init(PersonRepository repository) {
         return args -> {
+            if (repository.findByName("Юра") != null) return;
             Stream.of("Юра", "Цвета", "Евгенийй", "Влад", "Тарас", "Сергей").forEach(name -> repository.save(new Person(name)));
             for (Person person : repository.findAll()) {
                 System.out.println(person.getName());

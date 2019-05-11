@@ -27,7 +27,7 @@ public class Task {
     public Task() {
     }
 
-    public Task(String name, Date startDate, Date endDate) {
+    Task(String name, Date startDate, Date endDate) {
 
         this.name = name;
         this.startDate = startDate;

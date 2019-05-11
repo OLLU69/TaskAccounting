@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Person, Task} from './task';
 import {log} from 'util';
 import {map} from 'rxjs/operators';
@@ -15,7 +15,7 @@ export class TaskService {
   private persons: Person[];
 
   constructor(private http: HttpClient) {
-    this.http.get<Person  []>(this.personsUrl).subscribe(value => this.persons = value);
+    this.fetchPersons();
   }
 
   public getTasks(): Observable<Task[]> {
@@ -44,7 +44,17 @@ export class TaskService {
     return this.http.delete<any>(this.tasksUrl + id);
   }
 
-  public getAllPersons(): Person [] {
-    return this.persons;
+  public getAllPersons(): Observable<Person[]> {
+    if (this.persons === undefined) {
+      return this.fetchPersons()
+    }
+    return of(this.persons);
+  }
+
+  private fetchPersons(): Observable<Person[]> {
+    return this.http.get<Person[]>(this.personsUrl).pipe(map(value => {
+      this.persons = value;
+      return value
+    }));
   }
 }
