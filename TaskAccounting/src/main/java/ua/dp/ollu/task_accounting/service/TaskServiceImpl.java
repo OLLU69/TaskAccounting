@@ -5,13 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ua.dp.ollu.task_accounting.model.Person;
-import ua.dp.ollu.task_accounting.model.PersonsInTask;
 import ua.dp.ollu.task_accounting.model.Task;
 import ua.dp.ollu.task_accounting.repositories.PersonRepository;
 import ua.dp.ollu.task_accounting.repositories.TaskRepository;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service("taskService")
@@ -30,29 +28,6 @@ public class TaskServiceImpl implements TaskService {
         this.personRepository = personRepository;
         this.converter = converter;
         this.validator = validator;
-    }
-
-    //убирает из исходной task тех людей что нет в peoples.
-    //добавляет те что есть в peoples
-    //остальные оставляет как есть
-    static Set<PersonsInTask> syncPersonsInTaskListFromPersonsList(Task task, List<Person> peoples) {
-        Set<PersonsInTask> source = task.getPersons();
-        //отбираем что есть и добавляет новые
-        List<PersonsInTask> inTasks = peoples.stream().map(person -> {
-            PersonsInTask inTask = source.stream()
-                    .filter(tsk -> tsk.getPerson().getId().equals(person.getId()))
-                    .findFirst().orElse(null);
-            if (inTask == null) {
-                inTask = new PersonsInTask();
-                inTask.setTask(task);
-                inTask.setPerson(person);
-            }
-            return inTask;
-        }).collect(Collectors.toList());
-
-        source.clear();
-        source.addAll(inTasks);
-        return source;
     }
 
     @Override
@@ -77,8 +52,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public WebTask update(Long id, WebTask webTask) {
         System.out.println(webTask.getName());
-        Task task = getTaskForUpdateFromWebTask(id, webTask);
+        Task task = taskRepository.findById(id).orElse(null);
         if (task == null) return null;
+        converter.webTaskToTask(webTask, task);
         task = taskRepository.save(validator.validate(task));
         return converter.newWebTask(task);
 
@@ -98,18 +74,5 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Person getPerson(Long id) {
         return personRepository.findById(id).orElse(null);
-    }
-
-    private Task getTaskForUpdateFromWebTask(Long id, WebTask webTask) {
-        Task task = taskRepository.findById(id).orElse(null);
-        if (task == null) return null;
-        if (webTask.getName() != null)
-            task.setName(webTask.getName());
-        if (webTask.getStartDate() != null)
-            task.setStartDate(converter.parse(webTask.getStartDate()));
-        if (webTask.getEndDate() != null)
-            task.setEndDate(converter.parse(webTask.getEndDate()));
-        task.setPersons(syncPersonsInTaskListFromPersonsList(task, webTask.getPersonsList()));
-        return task;
     }
 }
