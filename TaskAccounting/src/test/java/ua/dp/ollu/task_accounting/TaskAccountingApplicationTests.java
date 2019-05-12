@@ -1,18 +1,14 @@
 package ua.dp.ollu.task_accounting;
 
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class TaskAccountingApplicationTests {
 //    private static final String NAME = "Бег";
 //    @Autowired
 //    private TaskRepository repository;
 //    @Autowired
 //    private PersonRepository personRepository;
-//    private DateConverter converter = new DateConverter.TaskConverter();
+//    private TaskConverter converter = new TaskConverter.TaskConverterImpl();
 //
 //    @Before
 //    @Transactional

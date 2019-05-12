@@ -14,21 +14,22 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ua.dp.ollu.task_accounting.service.TaskValidator.validate;
-
 @Service("taskService")
 public class TaskServiceImpl implements TaskService {
     @Getter
-    private final DateConverter dateConverter;
+    private final TaskConverter converter;
     private final TaskRepository taskRepository;
     private final PersonRepository personRepository;
     private final Sort sort = new Sort(Sort.Direction.ASC, "startDate");
 
+    private TaskValidator validator;
+
     @Autowired
-    public TaskServiceImpl(TaskRepository taskRepository, PersonRepository personRepository, DateConverter dateConverter) {
+    public TaskServiceImpl(TaskRepository taskRepository, PersonRepository personRepository, TaskConverter converter, TaskValidator validator) {
         this.taskRepository = taskRepository;
         this.personRepository = personRepository;
-        this.dateConverter = dateConverter;
+        this.converter = converter;
+        this.validator = validator;
     }
 
     //убирает из исходной task тех людей что нет в peoples.
@@ -56,21 +57,21 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<WebTask> getAllTasks() {
-        return taskRepository.findAll(sort).stream().map(this::newWebTask).collect(Collectors.toList());
+        return taskRepository.findAll(sort).stream().map(converter::newWebTask).collect(Collectors.toList());
     }
 
     @Override
     public WebTask getTask(Long id) throws Exception {
         Task task = taskRepository.findById(id).orElse(null);
         if (task == null) throw new Exception("null value error");
-        return newWebTask(task);
+        return converter.newWebTask(task);
 
     }
 
     @Override
     public WebTask save(WebTask webTask) {
-        Task task = taskRepository.save(validate(newTask(webTask)));
-        return newWebTask(task);
+        Task task = taskRepository.save(validator.validate(converter.newTask(webTask)));
+        return converter.newWebTask(task);
     }
 
     @Override
@@ -78,8 +79,8 @@ public class TaskServiceImpl implements TaskService {
         System.out.println(webTask.getName());
         Task task = getTaskForUpdateFromWebTask(id, webTask);
         if (task == null) return null;
-        task = taskRepository.save(validate(task));
-        return newWebTask(task);
+        task = taskRepository.save(validator.validate(task));
+        return converter.newWebTask(task);
 
     }
 
@@ -99,39 +100,15 @@ public class TaskServiceImpl implements TaskService {
         return personRepository.findById(id).orElse(null);
     }
 
-    private WebTask newWebTask(Task task) {
-        return new WebTask() {{
-            setId(task.getId());
-            setName(task.getName());
-            setStartDate(dateConverter.format(task.getStartDate()));
-            setEndDate(dateConverter.format(task.getEndDate()));
-            setPersonsList(task.getPersons().stream().map(PersonsInTask::getPerson).collect(Collectors.toList()));
-        }};
-    }
-
-    private Task newTask(WebTask webTask) {
-        Task task = new Task();
-        task.setId(webTask.getId());
-        task.setName(webTask.getName());
-        task.setStartDate(dateConverter.parse(webTask.getStartDate()));
-        task.setEndDate(dateConverter.parse(webTask.getEndDate()));
-        task.setPersons(webTask.getPersonsList()
-                .stream()
-                .map(person -> new PersonsInTask(task, person))
-                .collect(Collectors.toSet()));
-
-        return task;
-    }
-
     private Task getTaskForUpdateFromWebTask(Long id, WebTask webTask) {
         Task task = taskRepository.findById(id).orElse(null);
         if (task == null) return null;
         if (webTask.getName() != null)
             task.setName(webTask.getName());
         if (webTask.getStartDate() != null)
-            task.setStartDate(dateConverter.parse(webTask.getStartDate()));
+            task.setStartDate(converter.parse(webTask.getStartDate()));
         if (webTask.getEndDate() != null)
-            task.setEndDate(dateConverter.parse(webTask.getEndDate()));
+            task.setEndDate(converter.parse(webTask.getEndDate()));
         task.setPersons(syncPersonsInTaskListFromPersonsList(task, webTask.getPersonsList()));
         return task;
     }

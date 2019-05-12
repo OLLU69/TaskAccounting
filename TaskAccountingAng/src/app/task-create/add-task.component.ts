@@ -65,7 +65,7 @@ export class AddTaskComponent implements OnInit {
         value => this.back(),
         error => {
           log(error.error.message);
-          this.showError(error.message)
+          this.showError(error.error.message)
         });
     } else {
       log(this.editMode);

@@ -7,10 +7,10 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
-public class TaskConverterTest {
+public class TaskConverterImplTest {
 
     private String expected = "2019-04-12";
-    private DateConverter converter = new DateConverter.TaskConverter();
+    private TaskConverter converter = new TaskConverter.TaskConverterImpl();
 
     @Test
     public void parse() {
@@ -25,7 +25,7 @@ public class TaskConverterTest {
     @Test
     public void format() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, 1019);
+        calendar.set(Calendar.YEAR, 2019);
         calendar.set(Calendar.MONTH, 4 - 1);
         calendar.set(Calendar.DAY_OF_MONTH, 12);
         Date date = calendar.getTime();
