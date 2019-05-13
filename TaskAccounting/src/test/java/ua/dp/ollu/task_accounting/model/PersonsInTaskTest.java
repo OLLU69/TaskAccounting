@@ -41,7 +41,7 @@ public class PersonsInTaskTest {
     }
 
     @Test
-    public void HashSetUniquenessTest() {
+    public void hashSetUniquenessTest() {
         assertEquals(inTask1, inTask2);
         HashSet<PersonsInTask> inTasks = new HashSet<>();
         inTasks.add(inTask1);
