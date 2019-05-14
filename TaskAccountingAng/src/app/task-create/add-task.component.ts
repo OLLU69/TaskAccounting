@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CheckedPerson, Person, Task} from '../task';
+import {Person, Task} from '../task';
 import {TaskService} from '../task.service';
 import {log} from 'util';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -13,7 +13,7 @@ export class AddTaskComponent implements OnInit {
 
   header: string = 'Создание задания';
   task: Task = new Task();
-  persons: CheckedPerson[] = [];
+  persons: Person[] = [];
   alertMessage: string = null;
   private addMode = 'add-mode';
   private editMode = 'edit-mode';
@@ -26,8 +26,9 @@ export class AddTaskComponent implements OnInit {
     const id: number = this.route.snapshot.params.id;
     log(id);
     this.service.getAllPersons().subscribe(value => {
-      return this.setupPersons(id, value);
-    });
+        return this.setupPersons(id, value);
+      },
+      error => log(error.error.message));
   }
 
   setupPersons(id: number, persons: Person[]) {
@@ -35,7 +36,7 @@ export class AddTaskComponent implements OnInit {
       this.persons = [];
       return;
     }
-    persons.forEach(value => this.persons.push(new CheckedPerson().set(value)));
+    persons.forEach(value => this.persons.push(new Person().set(value)));
     if (id === undefined) {
       this.mode = this.addMode;
       this.header = 'Создание задания';
@@ -44,7 +45,7 @@ export class AddTaskComponent implements OnInit {
       this.service.getTask(id).subscribe(value => {
         this.mode = this.editMode;
         this.header = 'Редактирование задания';
-        this.task = value;
+        this.task = new Task().setTask(value);
         this.prepareCheckers();
       });
     }
@@ -56,7 +57,7 @@ export class AddTaskComponent implements OnInit {
     const personsToSave: Person[] = [];
     this.showError(null);
     this.persons.filter(value => value.checked).forEach(value => personsToSave.push(value));
-    task.personsList = personsToSave;
+    task.setPersons(personsToSave);
 
     if (this.mode === this.addMode) {
       log(this.addMode);
@@ -88,15 +89,15 @@ export class AddTaskComponent implements OnInit {
     this.router.navigate(['/task_list']);
   }
 
-  updateCheck(person: CheckedPerson, i: number) {
+  updateCheck(person: Person, i: number) {
     const value = this.persons[i];
     value.checked = !value.checked;
     log('name:' + value.name + ' checked: ' + value.checked);
   }
 
   private prepareCheckers() {
-    this.task.personsList.forEach(person => {
-      const checkedPerson = this.persons.find(chPerson => chPerson.id === person.id);
+    this.task.persons.forEach(person => {
+      const checkedPerson = this.persons.find(chPerson => chPerson.id === person.person.id);
       if (checkedPerson !== undefined) {
         checkedPerson.checked = true;
       }

@@ -1,26 +1,22 @@
 package ua.dp.ollu.task_accounting.service;
 
 import org.junit.Test;
-import ua.dp.ollu.task_accounting.model.Person;
 import ua.dp.ollu.task_accounting.model.PersonsInTask;
 import ua.dp.ollu.task_accounting.model.Task;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static ua.dp.ollu.task_accounting.TestUtils.converter;
+import static ua.dp.ollu.task_accounting.TestUtils.newPersonsInTask;
 
 public class TaskConverterImplTest {
 
     private String expected = "2019-04-12";
-    private TaskConverterImpl converter = new TaskConverterImpl();
-    private Person[] persons = {
-            newPerson(0, "Bill"),
-            newPerson(1, "Still"),
-            newPerson(2, "Jone"),
-            newPerson(3, "Andrea"),
-            newPerson(4, "Julia")
-    };
 
     @Test
     public void parse() {
@@ -46,37 +42,23 @@ public class TaskConverterImplTest {
     @Test
     public void syncPersonsInTaskListFromPersonsListTest() {
         Set<PersonsInTask> source = new HashSet<PersonsInTask>() {{
-            add(newPersonsInTask(0));
-            add(newPersonsInTask(1));
-            add(newPersonsInTask(2));
+            add(newPersonsInTask(0, 0));
+            add(newPersonsInTask(1, 1));
+            add(newPersonsInTask(2, 2));
         }};
 
-        ArrayList<Person> peoples = new ArrayList<Person>() {{
-            add(persons[1]);
-            add(persons[2]);
-            add(persons[3]);
-        }};
         Task task = new Task();
         task.setId(105L);
+        Set<PersonsInTask> peoples = new HashSet<PersonsInTask>() {{
+            add(newPersonsInTask(1, task, 1));
+            add(newPersonsInTask(2, task, 2));
+            add(newPersonsInTask(3, task, 3));
+        }};
         task.setPersons(source);
         Set<PersonsInTask> inTaskList = converter.syncPersonsInTaskListFromPersonsList(task, peoples);
         assertEquals(3, inTaskList.size());
         assertTrue(inTaskList.stream().anyMatch(inTask -> inTask.getPerson().getId() == 1));
         assertTrue(inTaskList.stream().anyMatch(inTask -> inTask.getPerson().getId() == 2));
         assertTrue(inTaskList.stream().anyMatch(inTask -> inTask.getPerson().getId() == 3));
-    }
-
-    private Person newPerson(long id, String name) {
-        Person person = new Person();
-        person.setId(id);
-        person.setName(name);
-        return person;
-    }
-
-    private PersonsInTask newPersonsInTask(int personId) {
-        PersonsInTask personInTask = new PersonsInTask();
-        personInTask.setId(0);
-        personInTask.setPerson(persons[personId]);
-        return personInTask;
     }
 }

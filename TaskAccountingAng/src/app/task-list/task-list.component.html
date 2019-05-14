@@ -13,7 +13,7 @@
       <td>{{ tack.startDate | date:"dd.MM.yyyy"}}</td>
       <td>{{ tack.endDate | date:"dd.MM.yyyy"}}</td>
       <td>{{ tack.name }}</td>
-      <td>{{ tack.persons }}</td>
+      <td>{{ tack.personsStr }}</td>
       <td><a [routerLink]="['/task_edit', tack.id]" class="btn btn-outline-dark">Редактировать</a></td>
       <td>
         <button (click)="delete(tack.id)" class="btn btn-danger">Удалить</button>

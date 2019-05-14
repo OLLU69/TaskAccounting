@@ -8,6 +8,7 @@ import ua.dp.ollu.task_accounting.service.TaskConverterImpl;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
+import static ua.dp.ollu.task_accounting.TestUtils.newTask;
 
 public class PersonsInTaskTest {
 
@@ -17,10 +18,7 @@ public class PersonsInTaskTest {
 
     @Before
     public void setUp() {
-        Task task = new Task(
-                "aa",
-                converter.parse("2019-05-01"),
-                converter.parse("2019-05-05"));
+        Task task = newTask("aa", "2019-05-01", "2019-05-05");
         task.setId(1L);
 
         Person people = new Person() {{

@@ -24,12 +24,15 @@ export class TaskListComponent implements OnInit {
         log(value);
         return;
       },
-      error1 => log(error1));
+      error => log(error.error.message));
   }
 
   private getTaskList() {
     this.service.getTasks().subscribe((data => {
-      this.taskList = data;
-    }));
+        this.taskList = data;
+      }),
+      error => {
+        return log(error.error.message);
+      });
   }
 }

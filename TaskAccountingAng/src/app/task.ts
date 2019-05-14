@@ -3,40 +3,53 @@ export class Task {
   startDate = getNowDate();
   endDate = getNowDate();
   name = '';
-  personsList: Person[] = [];
-  persons: string;
+  persons: PersonInTask[] = [];
+  personsStr: string;
 
-  setTask(task: Task
-  ): Task {
+  setTask(task: Task): Task {
     this.id = task.id;
-    this.startDate = task.startDate;
-    this.endDate = task.endDate;
+    this.startDate = normDate(task.startDate);
+    this.endDate = normDate(task.endDate);
     this.name = task.name;
-    this.personsList = task.personsList;
-    this.persons = this.getPersons();
+    this.persons = task.persons;
+    this.personsStr = this.getPersonsStr();
     return this;
   }
 
-  getPersons(): string {
-    return this.personsList.map(value => value.name).join();
+  setPersons(personsToSave: Person[]) {
+    this.persons = personsToSave.map(value => {
+      let personInTask = new PersonInTask();
+      personInTask.person = value;
+      return personInTask
+    })
+  }
+
+  getPersonsStr(): string {
+    return this.persons.map(value => value.person.name).join();
   }
 }
 
-export function getNowDate(): string {
-  return new Date().toISOString().substr(0, 10);
+function normDate(dateStr: string) {
+  return dateStr.substr(0, 10);
+}
+
+function getNowDate(): string {
+  return normDate(new Date().toISOString());
+}
+
+export class PersonInTask {
+  id: number = null;
+  person: Person
 }
 
 export class Person {
   id: number;
   name: string;
-}
-
-export class CheckedPerson extends Person {
   checked = false;
 
-  set(person: Person): CheckedPerson {
-    this.id = person.id;
-    this.name = person.name;
+  set(value: Person): Person {
+    this.id = value.id;
+    this.name = value.name;
     return this;
   }
 }

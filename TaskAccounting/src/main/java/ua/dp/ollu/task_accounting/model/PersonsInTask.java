@@ -1,5 +1,6 @@
 package ua.dp.ollu.task_accounting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +15,7 @@ public class PersonsInTask {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "TASKS_ID")
     private Task task;

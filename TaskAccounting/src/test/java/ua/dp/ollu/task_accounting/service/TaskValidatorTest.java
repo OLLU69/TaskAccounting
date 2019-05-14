@@ -11,6 +11,8 @@ import ua.dp.ollu.task_accounting.model.Task;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static ua.dp.ollu.task_accounting.TestUtils.setupTaskDate;
+import static ua.dp.ollu.task_accounting.TestUtils.setupTaskPersons;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,34 +39,29 @@ public class TaskValidatorTest {
 
     @Test()
     public void peopleBusyValidate() {
-        WebTask webTask = new WebTask();
-        setupTask(webTask, "task1", "2019-05-12", "2019-05-14");
+        Task task = new Task();
+        setupTaskDate(task, "task1", "2019-05-12", "2019-05-14");
         List<Person> allPersons = taskService.getPersons();
-        webTask.setPersonsList(allPersons.subList(0, 1));
-        assertEquals(0, validator.peopleBusyValidate(converter.newTask(webTask)).size());
-        taskService.save(webTask);
-        setupTask(webTask, "task2", "2019-05-15", "2019-05-16");
-        webTask = taskService.save(webTask);
+        setupTaskPersons(task, allPersons.subList(0, 1));
+        assertEquals(0, validator.peopleBusyValidate(task).size());
+        taskService.save(task);
+        setupTaskDate(task, "task2", "2019-05-15", "2019-05-16");
+        task = taskService.save(task);
 
-        webTask.setPersonsList(allPersons.subList(0, 2));
-        setupTask(webTask, "task3", "2019-05-15", "2019-05-16");
-        taskService.update(webTask.getId(), webTask);
+        setupTaskPersons(task, allPersons.subList(0, 2));
+        setupTaskDate(task, "task3", "2019-05-15", "2019-05-16");
+        taskService.update(task.getId(), task);
 
 
         boolean passed = false;
         try {
-            setupTask(webTask, "task3", "2019-05-13", "2019-05-16");
-            taskService.save(webTask);
+            setupTaskDate(task, "task3", "2019-05-13", "2019-05-16");
+            task.setId(null);
+            taskService.save(task);
         } catch (Error er) {
             passed = true;
         }
         assertTrue(passed);
 
-    }
-
-    private void setupTask(WebTask task, String name, String startDate, String endDate) {
-        task.setName(name);
-        task.setStartDate(startDate);
-        task.setEndDate(endDate);
     }
 }

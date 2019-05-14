@@ -1,10 +1,9 @@
 package ua.dp.ollu.task_accounting.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ua.dp.ollu.task_accounting.model.Person;
+import ua.dp.ollu.task_accounting.model.Task;
 import ua.dp.ollu.task_accounting.service.TaskService;
-import ua.dp.ollu.task_accounting.service.WebTask;
 
 import java.util.List;
 
@@ -13,42 +12,41 @@ import java.util.List;
 public class TaskController {
     private final TaskService taskService;
 
-    @Autowired
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/tasks")
-    public List<WebTask> getAllTasks() {
+    @GetMapping(value = "/tasks")
+    public List<Task> getAllTasks() {
         return taskService.getAllTasks();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/tasks/{id}")
-    public WebTask getTask(@PathVariable Long id) throws Exception {
+    @GetMapping(value = "/tasks/{id}")
+    public Task getTask(@PathVariable Long id) throws Exception {
         return taskService.getTask(id);
     }
 
-    @RequestMapping(value = "/tasks", method = RequestMethod.POST)
-    public WebTask save(@RequestBody WebTask webTask) {
+    @PostMapping(value = "/tasks")
+    public Task save(@RequestBody Task webTask) {
         return taskService.save(webTask);
     }
 
-    @RequestMapping(value = "/tasks/{id}", method = RequestMethod.PUT)
-    public WebTask update(@PathVariable Long id, @RequestBody WebTask webTask) {
+    @PutMapping(value = "/tasks/{id}")
+    public Task update(@PathVariable Long id, @RequestBody Task webTask) {
         return taskService.update(id, webTask);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/tasks/{id}")
+    @DeleteMapping(value = "/tasks/{id}")
     public void delete(@PathVariable Long id) {
         taskService.delete(id);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/persons")
+    @GetMapping(value = "/persons")
     public List<Person> getPersons() {
         return taskService.getPersons();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/persons/{id}")
+    @GetMapping(value = "/persons/{id}")
     public Person getPerson(@PathVariable Long id) {
         return taskService.getPerson(id);
     }

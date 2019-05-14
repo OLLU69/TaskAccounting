@@ -9,8 +9,8 @@ import ua.dp.ollu.task_accounting.model.Task;
 import ua.dp.ollu.task_accounting.repositories.PersonRepository;
 import ua.dp.ollu.task_accounting.repositories.TaskRepository;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service("taskService")
 public class TaskServiceImpl implements TaskService {
@@ -31,33 +31,34 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<WebTask> getAllTasks() {
-        return taskRepository.findAll(sort).stream().map(converter::newWebTask).collect(Collectors.toList());
+    public List<Task> getAllTasks() {
+        return taskRepository.findAll(sort);
     }
 
     @Override
-    public WebTask getTask(Long id) throws Exception {
+    public Task getTask(Long id) throws Exception {
         Task task = taskRepository.findById(id).orElse(null);
         if (task == null) throw new Exception("null value error");
-        return converter.newWebTask(task);
+        return task;
 
     }
 
     @Override
-    public WebTask save(WebTask webTask) {
-        Task task = taskRepository.save(validator.validate(converter.newTask(webTask)));
-        return converter.newWebTask(task);
+    public Task save(Task task) {
+        if (task.getPersons() == null) task.setPersons(Collections.emptySet());
+        task.getPersons().forEach(inTask -> inTask.setTask(task));
+        return taskRepository.save(validator.validate(task));
     }
 
     @Override
-    public WebTask update(Long id, WebTask webTask) {
-        System.out.println(webTask.getName());
+    public Task update(Long id, Task inTask) {
+        if (inTask.getPersons() == null) inTask.setPersons(Collections.emptySet());
+        System.out.println(inTask.getName());
         Task task = taskRepository.findById(id).orElse(null);
         if (task == null) return null;
-        converter.webTaskToTask(webTask, task);
+        converter.syncTaskPersons(task, inTask);
         task = taskRepository.save(validator.validate(task));
-        return converter.newWebTask(task);
-
+        return task;
     }
 
     @Override

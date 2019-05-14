@@ -24,7 +24,7 @@ public class Task {
     @Column(name = "endDate")
     private Date endDate;// дата окончания выполнения (без времени, с точностью до дня)
 
-    Task(String name, Date startDate, Date endDate) {
+    public Task(String name, Date startDate, Date endDate) {
 
         this.name = name;
         this.startDate = startDate;

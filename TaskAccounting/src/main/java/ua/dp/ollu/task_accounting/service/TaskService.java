@@ -1,17 +1,18 @@
 package ua.dp.ollu.task_accounting.service;
 
 import ua.dp.ollu.task_accounting.model.Person;
+import ua.dp.ollu.task_accounting.model.Task;
 
 import java.util.List;
 
 public interface TaskService {
-    List<WebTask> getAllTasks();
+    List<Task> getAllTasks();
 
-    WebTask getTask(Long id) throws Exception;
+    Task getTask(Long id) throws Exception;
 
-    WebTask save(WebTask webTask);
+    Task save(Task webTask);
 
-    WebTask update(Long id, WebTask webTask);
+    Task update(Long id, Task webTask);
 
     void delete(Long id);
 
