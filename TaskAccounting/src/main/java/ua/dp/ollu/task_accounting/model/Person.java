@@ -1,8 +1,8 @@
 package ua.dp.ollu.task_accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,8 +10,8 @@ import java.util.List;
 
 @Entity()
 @Table(name = "PERSON", schema = "TASK_PLAN")
-@Getter
-@Setter
+@Data
+@RequiredArgsConstructor
 @JsonIgnoreProperties("persons")
 public class Person {
     @Id
@@ -22,10 +22,6 @@ public class Person {
 
     @OneToMany(mappedBy = "person", orphanRemoval = true)
     List<PersonsInTask> persons;
-
-    public Person() {
-
-    }
 
     public Person(String name) {
 

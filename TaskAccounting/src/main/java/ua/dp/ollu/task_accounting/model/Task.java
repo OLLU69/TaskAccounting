@@ -1,7 +1,7 @@
 package ua.dp.ollu.task_accounting.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -9,8 +9,8 @@ import java.util.Set;
 
 @Entity()
 @Table(name = "TASK", schema = "TASK_PLAN")
-@Getter
-@Setter
+@Data
+@RequiredArgsConstructor
 public class Task {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     Set<PersonsInTask> persons;
@@ -23,9 +23,6 @@ public class Task {
     private Date startDate; //дата начала выполнения(без времени, с точностью до дня)
     @Column(name = "endDate")
     private Date endDate;// дата окончания выполнения (без времени, с точностью до дня)
-
-    public Task() {
-    }
 
     Task(String name, Date startDate, Date endDate) {
 

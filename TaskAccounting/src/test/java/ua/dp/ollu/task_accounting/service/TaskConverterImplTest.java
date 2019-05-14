@@ -4,7 +4,6 @@ import org.junit.Test;
 import ua.dp.ollu.task_accounting.model.Person;
 import ua.dp.ollu.task_accounting.model.PersonsInTask;
 import ua.dp.ollu.task_accounting.model.Task;
-import ua.dp.ollu.task_accounting.service.TaskConverter.TaskConverterImpl;
 
 import java.util.*;
 

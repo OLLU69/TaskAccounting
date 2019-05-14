@@ -2,13 +2,13 @@ package ua.dp.ollu.task_accounting.utils;
 
 import org.junit.Assert;
 import org.junit.Test;
-import ua.dp.ollu.task_accounting.service.TaskConverter;
+import ua.dp.ollu.task_accounting.service.TaskConverterImpl;
 
 import java.util.Date;
 
 public class DateUtilsTest {
 
-    private TaskConverter.TaskConverterImpl converter = new TaskConverter.TaskConverterImpl();
+    private TaskConverterImpl converter = new TaskConverterImpl();
 
     @Test
     public void isIntersectionTest() {

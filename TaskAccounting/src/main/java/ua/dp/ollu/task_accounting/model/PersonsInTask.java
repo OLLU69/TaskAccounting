@@ -1,14 +1,14 @@
 package ua.dp.ollu.task_accounting.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity()
 @Table(name = "PERSONS_IN_TASK", schema = "TASK_PLAN")
-@Getter
-@Setter
+@Data
+@RequiredArgsConstructor
 public class PersonsInTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +21,6 @@ public class PersonsInTask {
     @ManyToOne()
     @JoinColumn(name = "PERSONS_ID")
     private Person person;
-
-    public PersonsInTask() {
-    }
 
     public PersonsInTask(Task task, Person person) {
         this.task = task;

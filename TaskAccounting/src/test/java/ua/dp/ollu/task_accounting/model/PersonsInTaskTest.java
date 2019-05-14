@@ -3,6 +3,7 @@ package ua.dp.ollu.task_accounting.model;
 import org.junit.Before;
 import org.junit.Test;
 import ua.dp.ollu.task_accounting.service.TaskConverter;
+import ua.dp.ollu.task_accounting.service.TaskConverterImpl;
 
 import java.util.HashSet;
 
@@ -10,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 public class PersonsInTaskTest {
 
-    private TaskConverter converter = new TaskConverter.TaskConverterImpl();
+    private TaskConverter converter = new TaskConverterImpl();
     private PersonsInTask inTask1;
     private PersonsInTask inTask2;
 
