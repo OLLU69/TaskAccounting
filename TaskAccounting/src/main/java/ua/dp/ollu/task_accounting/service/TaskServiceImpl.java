@@ -74,6 +74,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Person getPerson(Long id) {
-        return personRepository.findById(id).orElse(null);
+        return personRepository.getOne(id);
     }
 }

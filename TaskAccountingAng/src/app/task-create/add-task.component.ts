@@ -11,7 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class AddTaskComponent implements OnInit {
 
-  header: string = 'Создание задания';
+  header = 'Создание задания';
   task: Task = new Task();
   persons: Person[] = [];
   alertMessage: string = null;
@@ -66,19 +66,19 @@ export class AddTaskComponent implements OnInit {
         value => this.back(),
         error => {
           log(error.error.message);
-          this.showError(error.error.message)
+          this.showError(error.error.message);
         });
     } else {
       log(this.editMode);
       // noinspection JSUnusedLocalSymbols
       this.service.update(task).subscribe(
         value => {
-          log("Ok");
+          log('Ok');
           this.back();
         },
         error => {
           log(error.error.message);
-          this.showError(error.error.message)
+          this.showError(error.error.message);
 
         });
     }
@@ -105,6 +105,6 @@ export class AddTaskComponent implements OnInit {
   }
 
   private showError(message: string) {
-    this.alertMessage = message
+    this.alertMessage = message;
   }
 }

@@ -28,8 +28,8 @@ public class TaskAccountingApplication extends SpringBootServletInitializer {
     @Transactional
     CommandLineRunner init(PersonRepository repository) {
         return args -> {
-            if (repository.findByName("Юра") != null) return;
-            Stream.of("Юра", "Цвета", "Евгенийй", "Влад", "Тарас", "Сергей").forEach(name -> repository.save(new Person(name)));
+            if (repository.count() != 0) return;
+            Stream.of("Юра", "Цвета", "Евгений", "Влад", "Тарас", "Сергей").forEach(name -> repository.save(new Person(name)));
             for (Person person : repository.findAll()) {
                 System.out.println(person.getName());
             }

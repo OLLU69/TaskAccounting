@@ -18,10 +18,10 @@ export class Task {
 
   setPersons(personsToSave: Person[]) {
     this.persons = personsToSave.map(value => {
-      let personInTask = new PersonInTask();
+      const personInTask = new PersonInTask();
       personInTask.person = value;
-      return personInTask
-    })
+      return personInTask;
+    });
   }
 
   getPersonsStr(): string {
@@ -39,7 +39,7 @@ function getNowDate(): string {
 
 export class PersonInTask {
   id: number = null;
-  person: Person
+  person: Person;
 }
 
 export class Person {

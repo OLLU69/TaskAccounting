@@ -46,7 +46,7 @@ export class TaskService {
 
   public getAllPersons(): Observable<Person[]> {
     if (this.persons === undefined) {
-      return this.fetchPersons()
+      return this.fetchPersons();
     }
     return of(this.persons);
   }
@@ -54,7 +54,7 @@ export class TaskService {
   private fetchPersons(): Observable<Person[]> {
     return this.http.get<Person[]>(this.personsUrl).pipe(map(value => {
       this.persons = value;
-      return value
+      return value;
     }));
   }
 }
